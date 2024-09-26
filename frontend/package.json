@@ -3,6 +3,9 @@
   "proxy": "http://127.0.0.1:5000",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@babel/traverse": "^7.25.6",
     "@reduxjs/toolkit": "^2.2.7",
