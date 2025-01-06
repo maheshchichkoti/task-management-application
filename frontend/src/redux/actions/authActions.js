@@ -1,50 +1,72 @@
-import api from "../../api"
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, SAVE_PROFILE } from "./actionTypes"
+import api from "../../api";
+import {
+  LOGIN_FAILURE,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  SAVE_PROFILE,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE,
+} from "./actionTypes";
 import { toast } from "react-toastify";
 
 export const postLoginData = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
-    const { data } = await api.post('/auth/login', { email, password });
+    const { data } = await api.post("/auth/login", { email, password });
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,
     });
-    localStorage.setItem('token', data.token);
+    localStorage.setItem("token", data.token);
     toast.success(data.msg);
-
-  }
-  catch (error) {
+  } catch (error) {
     const msg = error.response?.data?.msg || error.message;
     dispatch({
       type: LOGIN_FAILURE,
-      payload: { msg }
-    })
+      payload: { msg },
+    });
     toast.error(msg);
   }
-}
+};
 
-
+export const signup = (name, email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: SIGNUP_REQUEST });
+    const { data } = await api.post("/auth/signup", { name, email, password }); // No need to add /api here
+    dispatch({
+      type: SIGNUP_SUCCESS,
+      payload: data,
+    });
+    localStorage.setItem("token", data.token); // If your backend sends a token on signup
+    toast.success(data.msg);
+  } catch (error) {
+    const msg = error.response?.data?.msg || error.message;
+    dispatch({
+      type: SIGNUP_FAILURE,
+      payload: { msg },
+    });
+    toast.error(msg);
+  }
+};
 
 export const saveProfile = (token) => async (dispatch) => {
   try {
-    const { data } = await api.get('/profile', {
-      headers: { Authorization: token }
+    const { data } = await api.get("/profile", {
+      headers: { Authorization: token },
     });
     dispatch({
       type: SAVE_PROFILE,
       payload: { user: data.user, token },
     });
-  }
-  catch (error) {
+  } catch (error) {
     // console.log(error);
   }
-}
-
-
+};
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('token');
+  localStorage.removeItem("token");
   dispatch({ type: LOGOUT });
-  document.location.href = '/';
-}
+  document.location.href = "/";
+};
