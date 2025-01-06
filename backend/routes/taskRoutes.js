@@ -6,6 +6,7 @@ const {
   postTask,
   putTask,
   deleteTask,
+  getTaskStats,
 } = require("../controllers/taskControllers");
 const { verifyAccessToken } = require("../middlewares.js");
 
